@@ -1,7 +1,8 @@
 import hikari
 import random
+import os
 
-Opperado = hikari.GatewayBot("MTA0NjkyNjkzODg0NzA2MDAwOA.GmVtNg.mWLRzUMo6NQmGxBpei4zRFaUOUNTJmI6bnyXDY")
+Opperado = hikari.GatewayBot(os.environ["Token_Opperado"])
 @Opperado.listen(hikari.MessageCreateEvent)
 async def xingamento_de_tutu(evento):
 	xingamentos=["Bobo.","Burro.","Seboso.","Chato."]
@@ -18,10 +19,5 @@ async def cala_a_boca(evento):
 	if contador_de_mensagens_do_tutu==3:
 		contador_de_mensagens_do_tutu=0
 		await evento.message.respond("Cala a boca, Tutu!")
-
-
-#async def boas_vindas(evento):
-
-
 
 Opperado.run()
