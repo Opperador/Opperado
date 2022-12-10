@@ -15,7 +15,7 @@ contador_de_mensagens_do_tutu=0
 async def cala_a_boca(evento):
 	calabocamentos=["Quem chamou o Tutu?","Ninguem gosta do Tutu, fica quieto!","Cala a boca, Tutu"]
 	global contador_de_mensagens_do_tutu
-	if evento.message.author.id==624365838610202624:
+	if evento.message.author.id==os.environ.get("ID_DO_TUTU", 624365838610202624):
 		contador_de_mensagens_do_tutu+=1
 	if contador_de_mensagens_do_tutu==30:
 		contador_de_mensagens_do_tutu=0
