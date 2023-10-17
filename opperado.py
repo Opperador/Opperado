@@ -32,7 +32,7 @@ def atualizar_a_contagem_do_tutu():
 async def cala_a_boca(evento):
 	global calabocamentos
 	global contador_de_mensagens_do_tutu
-	if evento.message.author.id == os.environ.get("ID_DO_TUTU", 624365838610202624):
+	if evento.message.author.id == int(os.environ.get("ID_DO_TUTU", 624365838610202624)):
 		contador_de_mensagens_do_tutu += 1
 		atualizar_a_contagem_do_tutu()
 	if contador_de_mensagens_do_tutu == 30:
