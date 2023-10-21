@@ -13,6 +13,8 @@ xingamentos: list[str] = cliente_bd["opperado"]["opperado"].find_one()["xingamen
 calabocamentos: list[str] = cliente_bd["opperado"]["opperado"].find_one()["calabocamentos"]
 contador_mensagens_tutu: int = cliente_bd["opperado"]["opperado"].find_one()["contador_de_mensagens_do_tutu"]
 
+OPPERANTES: Final[list[int]] = [310169288432418817, 308358218839752704, 331650696585805825]
+
 
 @opperado.listen()
 async def xinga_tutu(evento: hikari.MessageCreateEvent) -> None:
@@ -38,6 +40,13 @@ async def calaboca_tutu(evento: hikari.MessageCreateEvent) -> None:
 		contador_mensagens_tutu = 0
 		atualiza_bd()
 		await evento.message.respond(random.choice(calabocamentos))
+
+
+@opperado.listen()
+async def desliga(evento: hikari.DMMessageCreateEvent):
+	if evento.content.lower() == "desliga" and evento.author_id in OPPERANTES:
+		await evento.message.respond("Desligando...")
+		await opperado.close()
 
 
 opperado.run()
