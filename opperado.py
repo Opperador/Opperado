@@ -27,7 +27,7 @@ async def xinga_tutu(evento: hikari.MessageCreateEvent) -> None:
 
 
 def atualiza_bd() -> None:
-	cliente_bd["opperado"]["opperado"].update_one(
+	cliente_bd["opperado"]["miscelânea"].update_one(
 		{}, {"$set": {"contador_de_mensagens_do_tutu": contador_mensagens_tutu}}
 	)
 
