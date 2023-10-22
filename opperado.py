@@ -7,13 +7,16 @@ import pymongo
 
 
 opperado: Final[hikari.GatewayBot] = hikari.GatewayBot(os.environ["FICHA_DE_OPPERADO"])
+OPPERANTES: Final[list[int]] = [310169288432418817, 308358218839752704, 331650696585805825]
 cliente_bd: Final[pymongo.MongoClient] = pymongo.MongoClient(os.environ["LINHA_DE_CONEXAO_DO_MONGODB_DE_OPPERADO"])
 
-xingamentos: list[str] = cliente_bd["opperado"]["opperado"].find_one()["xingamentos"]
-calabocamentos: list[str] = cliente_bd["opperado"]["opperado"].find_one()["calabocamentos"]
-contador_mensagens_tutu: int = cliente_bd["opperado"]["opperado"].find_one()["contador_de_mensagens_do_tutu"]
+xingamentos: pymongo.cursor.Cursor = cliente_bd["opperado"]["xingamentos"].find()
+xingamentos: list[str] = [documento["xingamento"] for documento in xingamentos]
 
-OPPERANTES: Final[list[int]] = [310169288432418817, 308358218839752704, 331650696585805825]
+calabocamentos: pymongo.cursor.Cursor = cliente_bd["opperado"]["calabocamentos"].find()
+calabocamentos: list[str] = [documento["calabocamento"] for documento in calabocamentos]
+
+contador_mensagens_tutu: int = cliente_bd["opperado"]["miscelânea"].find_one()["contador_de_mensagens_do_tutu"]
 
 
 @opperado.listen()
