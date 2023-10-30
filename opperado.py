@@ -1,4 +1,5 @@
 from typing import Final
+import string
 import random
 import os
 
@@ -22,7 +23,40 @@ contador_mensagens_tutu: int = cliente_bd["opperado"]["miscelânea"].find_one()[
 @opperado.listen()
 async def xinga_tutu(evento: hikari.MessageCreateEvent) -> None:
 	global xingamentos
-	if evento.content.lower() == "o tutu é":
+	print("xinga_tutu")
+	conteúdo = evento.content.lower()
+
+	if not conteúdo.startswith("o tutu"):
+		return
+	conteúdo = conteúdo.removeprefix("o tutu")
+
+	não = False
+	if conteúdo.startswith("não"):
+		não = True
+	conteúdo = conteúdo.removeprefix("não")
+	conteúdo = conteúdo.lstrip()
+
+	if not conteúdo.startswith("é"):
+		return
+	conteúdo = conteúdo.removeprefix("é")
+	conteúdo = conteúdo.lstrip()
+
+	interrogação = conteúdo.endswith("?")
+	conteúdo = conteúdo.strip(string.whitespace + string.punctuation)
+
+	if conteúdo:
+		tutu_é = conteúdo in xingamentos
+		if interrogação:
+			if tutu_é:
+				await evento.message.respond(f'Sim, ele é "{conteúdo}".')
+			else:
+				await evento.message.respond(f'Não, ele não é "{conteúdo}".')
+		else:
+			if not tutu_é:
+				await evento.message.respond(f'Eu deveria anotar "{conteúdo}". Mas eu ainda não sei fazer isso.')
+			else:
+				await evento.message.respond(f'Eu já sei que ele é "{conteúdo}".')
+	else:
 		await evento.message.respond(random.choice(xingamentos))
 
 
