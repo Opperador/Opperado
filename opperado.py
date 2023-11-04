@@ -1,4 +1,5 @@
 from typing import Final
+import asyncio
 import string
 import random
 import os
@@ -23,12 +24,12 @@ contador_mensagens_tutu: int = cliente_bd["opperado"]["miscelânea"].find_one()[
 @opperado.listen()
 async def xinga_tutu(evento: hikari.MessageCreateEvent) -> None:
 	global xingamentos
-	print("xinga_tutu")
 	conteúdo = evento.content.lower()
 
 	if not conteúdo.startswith("o tutu"):
 		return
 	conteúdo = conteúdo.removeprefix("o tutu")
+	conteúdo = conteúdo.lstrip()
 
 	não = False
 	if conteúdo.startswith("não"):
@@ -45,19 +46,35 @@ async def xinga_tutu(evento: hikari.MessageCreateEvent) -> None:
 	conteúdo = conteúdo.strip(string.whitespace + string.punctuation)
 
 	if conteúdo:
-		tutu_é = conteúdo in xingamentos
-		if interrogação:
-			if tutu_é:
-				await evento.message.respond(f'Sim, ele é "{conteúdo}".')
+		if não:
+			if interrogação:
+				await evento.message.respond(f'Eu não sei se o Tutu não é "{conteúdo}."')
+				await asyncio.sleep(3)
+				await evento.message.respond("Ainda...")
 			else:
-				await evento.message.respond(f'Não, ele não é "{conteúdo}".')
+				await evento.message.respond(
+					f'Eu deveria anotar que ele não é "{conteúdo}". '
+					f'Mas eu ainda não sei fazer isso.'
+				)
 		else:
-			if not tutu_é:
-				await evento.message.respond(f'Eu deveria anotar "{conteúdo}". Mas eu ainda não sei fazer isso.')
+			ele_é = conteúdo in xingamentos
+			if interrogação:
+				if ele_é:
+					await evento.message.respond(f'Sim, ele é "{conteúdo}".')
+				else:
+					await evento.message.respond(f'Não, ele não é "{conteúdo}".')
 			else:
-				await evento.message.respond(f'Eu já sei que ele é "{conteúdo}".')
+				if ele_é:
+					await evento.message.respond(f'Eu já sei que ele é "{conteúdo}".')
+				else:
+					await evento.message.respond(f'Eu deveria anotar "{conteúdo}". Mas eu ainda não sei fazer isso.')
 	else:
-		await evento.message.respond(random.choice(xingamentos))
+		if não:
+			await evento.message.respond("Eu não sei o que o Tutu não é.")
+			await asyncio.sleep(3)
+			await evento.message.respond("Ainda...")
+		else:
+			await evento.message.respond(random.choice(xingamentos))
 
 
 def atualiza_bd() -> None:
